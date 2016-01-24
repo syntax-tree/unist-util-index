@@ -23,9 +23,9 @@ Create mutable index mapping property values or computed keys back to [Unist] no
   - node type (string);
   - function invoked with arguments `(node, index?, parent?)`.
 
-- `key` - one of:
+- `key` — one of:
   - property name (string);
-  - function invoked with arguments `(node, index?, parent?)`.
+  - function invoked with argument `(node)`.
 
 Create index data structure that maps keys (returned by `key` function or property) to `ast` nodes.
 

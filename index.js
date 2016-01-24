@@ -4,6 +4,29 @@ var Map = require('es6-map'),
     is = require('unist-util-is');
 
 
+var IndexPrototype = {
+  get: function (key) {
+    return this.index.get(key) || [];
+  },
+
+  add: function (node) {
+    var key = this.keyfn(node);
+
+    if (!this.index.has(key)) {
+      this.index.set(key, []);
+    }
+
+    var nodes = this.index.get(key);
+
+    if (nodes.indexOf(node) < 0) {
+      nodes.push(node);
+    }
+
+    return this;
+  }
+};
+
+
 module.exports = function Index (ast, filter, keyfn) {
   if (keyfn === undefined) {
     return Index(ast, function () { return true }, filter);
@@ -14,17 +37,18 @@ module.exports = function Index (ast, filter, keyfn) {
     }(keyfn));
   }
 
-  var index = new Map;
+  var index = Object.create(IndexPrototype, {
+    index: {
+      value: new Map
+    },
+    keyfn: {
+      value: keyfn
+    }
+  });
 
   (function preorder (node, nodeIndex, parent) {
     if (is(filter, node, nodeIndex, parent)) {
-      var key = keyfn(node);
-
-      if (!index.has(key)) {
-        index.set(key, []);
-      }
-
-      index.get(key).push(node);
+      index.add(node);
     }
 
     node.children && node.children.forEach(function (child, childIndex) {
@@ -32,9 +56,5 @@ module.exports = function Index (ast, filter, keyfn) {
     });
   }(ast, null, null));
 
-  return {
-    get: function (key) {
-      return index.get(key) || [];
-    }
-  };
+  return index;
 };
