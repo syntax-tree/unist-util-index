@@ -15,7 +15,7 @@ Create mutable index mapping property values or computed keys back to [Unist] no
 
 ## API
 
-### `index = Index(ast, [filter], key)`
+### `index = Index([ast, [filter]], key)`
 
 - `ast` — [Unist] tree.
 
@@ -27,7 +27,9 @@ Create mutable index mapping property values or computed keys back to [Unist] no
   - property name (string);
   - function invoked with argument `(node)`.
 
-Create index data structure that maps keys (returned by `key` function or property) to `ast` nodes.
+Create index data structure that maps keys (returned by `key` function or property) to nodes.
+
+If `ast` argument is given, initialize index with `ast` nodes (recursively), optionally filter by node type or predicate.
 
 ### `index.get(key)`
 

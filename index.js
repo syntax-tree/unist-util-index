@@ -40,8 +40,11 @@ var IndexPrototype = {
 
 
 module.exports = function Index (ast, filter, keyfn) {
-  if (keyfn === undefined) {
-    return Index(ast, function () { return true }, filter);
+  if (arguments.length == 1) {
+    return Index(null, trueConst, arguments[0]);
+  }
+  if (arguments.length == 2) {
+    return Index(arguments[0], trueConst, arguments[1]);
   }
   if (typeof keyfn == 'string') {
     keyfn = (function (prop) {
@@ -58,6 +61,11 @@ module.exports = function Index (ast, filter, keyfn) {
     }
   });
 
+  if (!ast) {
+    return index;
+  }
+
+  // Initialize in preorder traversal.
   (function preorder (node, nodeIndex, parent) {
     if (is(filter, node, nodeIndex, parent)) {
       index.add(node);
@@ -70,3 +78,8 @@ module.exports = function Index (ast, filter, keyfn) {
 
   return index;
 };
+
+
+function trueConst () {
+  return true;
+}

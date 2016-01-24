@@ -106,6 +106,13 @@ test('degenerate keys', function (t) {
 });
 
 
+test('empty index', function (t) {
+  t.deepEqual(Index(null, 'foo').get('bar'), []);
+  t.deepEqual(Index('foo').get('bar'), []);
+  t.end();
+});
+
+
 test('Index filter', function (t) {
   var ast = u('root', [
     u('node', { word: 'foo' }),
