@@ -23,6 +23,18 @@ var IndexPrototype = {
     }
 
     return this;
+  },
+
+  remove: function (node) {
+    var key = this.keyfn(node);
+    var nodes = this.index.get(key);
+    var nodeIndex;
+
+    if (nodes && (nodeIndex = nodes.indexOf(node)) >= 0) {
+      nodes.splice(nodeIndex, 1);
+    }
+
+    return this;
   }
 };
 
