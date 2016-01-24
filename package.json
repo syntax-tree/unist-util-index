@@ -1,0 +1,41 @@
+{
+  "name": "unist-util-index",
+  "version": "0.0.0",
+  "description": "Index Unist nodes by property or computed key",
+  "author": "Eugene Sharygin <eush77@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "test": "tape test/*.js"
+  },
+  "files": [
+    "index.js"
+  ],
+  "homepage": "https://github.com/eush77/unist-util-index",
+  "repository": "eush77/unist-util-index",
+  "bugs": {
+    "url": "https://github.com/eush77/unist-util-index/issues"
+  },
+  "keywords": [
+    "ast",
+    "computed",
+    "filter",
+    "function",
+    "index",
+    "indexing",
+    "key",
+    "lookup",
+    "map",
+    "node",
+    "property",
+    "subset",
+    "tree",
+    "unist",
+    "util"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "tape": "^4.4.0",
+    "unist-builder": "^1.0.1",
+    "unist-util-select": "^1.4.0"
+  }
+}
