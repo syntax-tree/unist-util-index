@@ -104,3 +104,32 @@ test('degenerate keys', function (t) {
 
   t.end();
 });
+
+
+test('Index constructor', function (t) {
+  var ast = u('root', [
+    u('node', { word: 'foo' }),
+    u('node', { word: 'bar' }),
+    u('skip', { word: 'foo' }),
+    u('skip', { word: 'bar' })
+  ]);
+  var $$ = select(ast);
+
+  t.test('type test', function (t) {
+    var index = Index(ast, 'node', 'word');
+    t.deepEqual(index.get('foo'), $$('node[word="foo"]'));
+    t.deepEqual(index.get('bar'), $$('node[word="bar"]'));
+    t.end();
+  });
+
+  t.test('function test', function (t) {
+    var index = Index(ast, function (node, index, parent) {
+      return 'word' in node && index < 2 && parent.type == 'root';
+    }, 'word');
+    t.deepEqual(index.get('foo'), $$('node[word="foo"]'));
+    t.deepEqual(index.get('bar'), $$('node[word="bar"]'));
+    t.end();
+  });
+
+  t.end();
+});
