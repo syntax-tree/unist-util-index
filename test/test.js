@@ -4,7 +4,7 @@ var Index = require('..');
 
 var test = require('tape'),
     u = require('unist-builder'),
-    select = require('unist-util-select').one;
+    select = require('unist-util-select');
 
 
 test('index.get', function (t) {
@@ -30,7 +30,7 @@ test('index.get', function (t) {
       ])
     ])
   ]);
-  var $ = select.bind(null, ast);
+  var $ = select.one(ast);
 
   var index = Index(ast, 'color');
 
@@ -57,5 +57,21 @@ test('index.get', function (t) {
 
   t.deepEqual(index.get('yellow'), []);
 
+  t.end();
+});
+
+
+test('Object.prototype keys', function (t) {
+  var ast = u('node', { word: '__proto__', id: 0 }, [
+    u('node', { word: 'constructor', id: 1 }),
+    u('node', { word: 'toString', id: 2 })
+  ]);
+  var $ = select.one(ast);
+
+  var index = Index(ast, 'word');
+
+  t.deepEqual(index.get('__proto__'), [$('[id=0]')]);
+  t.deepEqual(index.get('constructor'), [$('[id=1]')]);
+  t.deepEqual(index.get('toString'), [$('[id=2]')]);
   t.end();
 });

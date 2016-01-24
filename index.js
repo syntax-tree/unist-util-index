@@ -2,7 +2,7 @@
 
 
 module.exports = function (ast, prop) {
-  var index = {};
+  var index = Object.create(null);
 
   (function preorder (node) {
     var key = node[prop];
