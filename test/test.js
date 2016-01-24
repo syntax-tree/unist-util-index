@@ -106,7 +106,7 @@ test('degenerate keys', function (t) {
 });
 
 
-test('Index constructor', function (t) {
+test('Index filter', function (t) {
   var ast = u('root', [
     u('node', { word: 'foo' }),
     u('node', { word: 'bar' }),
@@ -130,6 +130,41 @@ test('Index constructor', function (t) {
     t.deepEqual(index.get('bar'), $$('node[word="bar"]'));
     t.end();
   });
+
+  t.end();
+});
+
+
+test('computed keys', function (t) {
+  var ast = u('root', { x: 0, y: 4, id: 0 }, [
+    u('node', { x: 3, y: 2, id: 1 }),
+    u('node', { x: 2, y: 2, id: 2 }),
+    u('node', { x: 3, y: 1, id: 3 }),
+    u('node', { x: 4, y: 1, id: 4 })
+  ]);
+  var $ = select.one(ast);
+  var index;
+
+  var xPlusY = function (node) {
+    return node.x + node.y;
+  };
+
+  index = Index(ast, xPlusY);
+  t.deepEqual(index.get(4), [
+    $('[id=0]'),
+    $('[id=2]'),
+    $('[id=3]')
+  ]);
+  t.deepEqual(index.get(0), []);
+  t.deepEqual(index.get(5), [
+    $('[id=1]'),
+    $('[id=4]')
+  ]);
+
+  t.deepEqual(Index(ast, 'node', xPlusY).get(4), [
+    $('[id=2]'),
+    $('[id=3]')
+  ]);
 
   t.end();
 });

@@ -4,16 +4,21 @@ var Map = require('es6-map'),
     is = require('unist-util-is');
 
 
-module.exports = function Index (ast, filter, prop) {
-  if (prop === undefined) {
+module.exports = function Index (ast, filter, keyfn) {
+  if (keyfn === undefined) {
     return Index(ast, function () { return true }, filter);
+  }
+  if (typeof keyfn == 'string') {
+    keyfn = (function (prop) {
+      return function (node) { return node[prop] };
+    }(keyfn));
   }
 
   var index = new Map;
 
   (function preorder (node, nodeIndex, parent) {
     if (is(filter, node, nodeIndex, parent)) {
-      var key = node[prop];
+      var key = keyfn(node);
 
       if (!index.has(key)) {
         index.set(key, []);
