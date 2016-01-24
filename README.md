@@ -20,7 +20,6 @@ Create mutable index mapping property values or computed keys back to [Unist] no
 - `ast` — [Unist] tree.
 
 - `filter` — one of:
-  - [Unist] node;
   - node type (string);
   - function invoked with arguments `(node, index?, parent?)`.
 
