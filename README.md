@@ -39,17 +39,17 @@ var index = Index(ast, 'definition', 'identifier');
 
 index.get('unist')
 //=> [ { type: 'definition',
-         identifier: 'unist',
-         title: null,
-         link: 'https://github.com/wooorm/unist',
-         position: Position { start: [Object], end: [Object], indent: [] } } ]
+//       identifier: 'unist',
+//       title: null,
+//       link: 'https://github.com/wooorm/unist',
+//       position: Position { start: [Object], end: [Object], indent: [] } } ]
 
 index.get('travis')
 //=> [ { type: 'definition',
-         identifier: 'travis',
-         title: null,
-         link: 'https://travis-ci.org/eush77/unist-util-index',
-         position: Position { start: [Object], end: [Object], indent: [] } } ]
+//       identifier: 'travis',
+//       title: null,
+//       link: 'https://travis-ci.org/eush77/unist-util-index',
+//       position: Position { start: [Object], end: [Object], indent: [] } } ]
 ```
 
 ## API
