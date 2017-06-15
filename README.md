@@ -19,6 +19,7 @@ Headings by depth:
 
 ```js
 var Index = require('unist-util-index'),
+    fs = require('fs'),
     remark = require('remark'),
     toString = require('mdast-util-to-string');
 
@@ -41,14 +42,14 @@ index.get('unist')
 //=> [ { type: 'definition',
 //       identifier: 'unist',
 //       title: null,
-//       link: 'https://github.com/wooorm/unist',
+//       url: 'https://github.com/wooorm/unist',
 //       position: Position { start: [Object], end: [Object], indent: [] } } ]
 
 index.get('travis')
 //=> [ { type: 'definition',
 //       identifier: 'travis',
 //       title: null,
-//       link: 'https://travis-ci.org/eush77/unist-util-index',
+//       url: 'https://travis-ci.org/eush77/unist-util-index',
 //       position: Position { start: [Object], end: [Object], indent: [] } } ]
 ```
 
