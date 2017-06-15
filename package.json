@@ -1,6 +1,6 @@
 {
   "name": "unist-util-index",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Index Unist nodes by property or computed key",
   "author": "Eugene Sharygin <eush77@gmail.com>",
   "license": "MIT",
