@@ -10,7 +10,6 @@ Index.prototype.add = add
 Index.prototype.remove = remove
 
 function Index(tree, filter, prop) {
-  var key
   var self
 
   if (!(this instanceof Index)) {
@@ -29,10 +28,9 @@ function Index(tree, filter, prop) {
   }
 
   self = this
-  key = typeof prop === 'string' ? pluck : prop
 
   this.index = new Map()
-  this.keyfn = key
+  this.keyfn = typeof prop === 'string' ? pluck : prop
 
   if (tree) {
     visit(tree, filter, add)

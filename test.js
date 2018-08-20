@@ -17,7 +17,7 @@ test('Index', function(t) {
   t.deepEqual(
     [instance instanceof Index, instance.get(1)],
     [true, [node]],
-    'index(key)'
+    'index(prop)'
   )
 
   instance = new Index('id')
@@ -26,7 +26,7 @@ test('Index', function(t) {
   t.deepEqual(
     [instance instanceof Index, instance.get(1)],
     [true, [node]],
-    'new Index(key)'
+    'new Index(prop)'
   )
 
   instance = index(keyFn)
@@ -52,15 +52,15 @@ test('Index', function(t) {
   t.deepEqual(
     [instance instanceof Index, instance.get(1)],
     [true, [node, alt]],
-    'index(tree, key)'
+    'index(tree, prop)'
   )
 
-  instance = new Index(tree, keyFn)
+  instance = new Index(tree, 'id')
 
   t.deepEqual(
     [instance instanceof Index, instance.get(1)],
     [true, [node, alt]],
-    'new Index(tree, key)'
+    'new Index(tree, prop)'
   )
 
   instance = index(tree, filter, 'id')
@@ -68,15 +68,15 @@ test('Index', function(t) {
   t.deepEqual(
     [instance instanceof Index, instance.get(1)],
     [true, [node]],
-    'index(tree, filter, key)'
+    'index(tree, filter, prop)'
   )
 
-  instance = new Index(tree, filter, keyFn)
+  instance = new Index(tree, filter, 'id')
 
   t.deepEqual(
     [instance instanceof Index, instance.get(1)],
     [true, [node]],
-    'new Index(tree, filter, key)'
+    'new Index(tree, filter, prop)'
   )
 
   t.end()
