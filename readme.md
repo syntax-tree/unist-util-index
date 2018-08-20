@@ -28,6 +28,7 @@ var index = new Index(tree, 'heading', 'depth')
 console.log(index.get(1).map(toString))
 console.log(index.get(2).map(toString))
 
+// Index on definition identifier:
 index = new Index(tree, 'definition', 'identifier')
 
 console.log(index.get('unist').map(node => node.url))
