@@ -50,7 +50,7 @@ Yields:
 
 ## API
 
-### `Index([tree[, filter]], prop|keyFn)`
+### `Index([tree, [filter, ]]prop|keyFn)`
 
 Create an index data structure that maps keys (calculated by `keyFn` function
 or the values at `prop` in each node) to a list of nodes.
