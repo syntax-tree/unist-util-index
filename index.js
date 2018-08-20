@@ -1,85 +1,89 @@
-'use strict';
+'use strict'
 
-var Map = require('es6-map'),
-    is = require('unist-util-is');
+var Map = require('es6-map')
+var visit = require('unist-util-visit')
 
+module.exports = Index
 
-var IndexPrototype = {
-  get: function (key) {
-    return this.index.get(key) || [];
-  },
+Index.prototype.get = get
+Index.prototype.add = add
+Index.prototype.remove = remove
 
-  add: function (node) {
-    var key = this.keyfn(node);
+function Index(tree, filter, prop) {
+  var key
+  var self
 
-    if (!this.index.has(key)) {
-      this.index.set(key, []);
-    }
-
-    var nodes = this.index.get(key);
-
-    if (nodes.indexOf(node) < 0) {
-      nodes.push(node);
-    }
-
-    return this;
-  },
-
-  remove: function (node) {
-    var key = this.keyfn(node);
-    var nodes = this.index.get(key);
-    var nodeIndex;
-
-    if (nodes && (nodeIndex = nodes.indexOf(node)) >= 0) {
-      nodes.splice(nodeIndex, 1);
-    }
-
-    return this;
-  }
-};
-
-
-module.exports = function Index (ast, filter, keyfn) {
-  if (arguments.length == 1) {
-    return Index(null, trueConst, arguments[0]);
-  }
-  if (arguments.length == 2) {
-    return Index(arguments[0], trueConst, arguments[1]);
-  }
-  if (typeof keyfn == 'string') {
-    keyfn = (function (prop) {
-      return function (node) { return node[prop] };
-    }(keyfn));
+  if (!(this instanceof Index)) {
+    return new Index(tree, filter, prop)
   }
 
-  var index = Object.create(IndexPrototype, {
-    index: {
-      value: new Map
-    },
-    keyfn: {
-      value: keyfn
+  if (prop === null || prop === undefined) {
+    if (filter === null || filter === undefined) {
+      prop = tree
+      tree = null
+    } else {
+      prop = filter
     }
-  });
 
-  if (!ast) {
-    return index;
+    filter = trueConst
   }
 
-  // Initialize in preorder traversal.
-  (function preorder (node, nodeIndex, parent) {
-    if (is(filter, node, nodeIndex, parent)) {
-      index.add(node);
-    }
+  self = this
+  key = typeof prop === 'string' ? pluck : prop
 
-    node.children && node.children.forEach(function (child, childIndex) {
-      preorder(child, childIndex, node);
-    });
-  }(ast, null, null));
+  this.index = new Map()
+  this.keyfn = key
 
-  return index;
-};
+  if (tree) {
+    visit(tree, filter, add)
+  }
 
+  return this
 
-function trueConst () {
-  return true;
+  function pluck(node) {
+    return node[prop]
+  }
+
+  function add(node) {
+    self.add(node)
+  }
+}
+
+function get(key) {
+  return this.index.get(key) || []
+}
+
+function add(node) {
+  var self = this
+  var key = self.keyfn(node)
+  var nodes
+
+  if (!self.index.has(key)) {
+    self.index.set(key, [])
+  }
+
+  nodes = self.index.get(key)
+
+  if (nodes.indexOf(node) === -1) {
+    nodes.push(node)
+  }
+
+  return self
+}
+
+function remove(node) {
+  var self = this
+  var key = self.keyfn(node)
+  var nodes = self.index.get(key)
+  var pos = nodes ? nodes.indexOf(node) : -1
+
+  if (pos !== -1) {
+    nodes.splice(pos, 1)
+  }
+
+  return self
+}
+
+function trueConst() {
+  return true
 }

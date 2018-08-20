@@ -1,44 +1,31 @@
-'use strict';
+'use strict'
 
-var Index = require('..');
+var Index = require('..')
 
-var test = require('tape'),
-    u = require('unist-builder'),
-    select = require('unist-util-select');
+var test = require('tape')
 
+var u = require('unist-builder')
 
-test('index.add', function (t) {
-  var ast = u('root', [
-    u('node', { word: 'foo' }),
-    u('node', { word: 'bar' })
-  ]);
-  var extraNode = u('node', { word: 'foo' });
-  var $ = select.one(ast);
+var select = require('unist-util-select')
 
-  var index = Index(ast, 'word');
-  t.deepEqual(index.get('foo'), [
-    $('[word=foo]')
-  ]);
+test('index.add', function(t) {
+  var ast = u('root', [u('node', {word: 'foo'}), u('node', {word: 'bar'})])
+  var extraNode = u('node', {word: 'foo'})
+  var $ = select.one(ast)
 
-  var result = index.add(extraNode);
-  t.deepEqual(index.get('foo'), [
-    $('[word=foo]'),
-    extraNode
-  ]);
+  var index = new Index(ast, 'word')
+  t.deepEqual(index.get('foo'), [$('[word=foo]')])
 
-  t.equal(result, index, 'returns this');
+  var result = index.add(extraNode)
+  t.deepEqual(index.get('foo'), [$('[word=foo]'), extraNode])
 
-  index.add($('[word=foo]'));
-  t.deepEqual(index.get('foo'), [
-    $('[word=foo]'),
-    extraNode
-  ]);
+  t.equal(result, index, 'returns this')
 
-  index.add(extraNode);
-  t.deepEqual(index.get('foo'), [
-    $('[word=foo]'),
-    extraNode
-  ]);
+  index.add($('[word=foo]'))
+  t.deepEqual(index.get('foo'), [$('[word=foo]'), extraNode])
 
-  t.end();
-});
+  index.add(extraNode)
+  t.deepEqual(index.get('foo'), [$('[word=foo]'), extraNode])
+
+  t.end()
+})
