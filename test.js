@@ -5,6 +5,91 @@ var u = require('unist-builder')
 var select = require('unist-util-select')
 var Index = require('.')
 
+var index = Index
+
+test('Index', function(t) {
+  var node = {type: 'a', id: 1}
+  var alt = {type: 'b', id: 1}
+  var tree = {type: 'root', children: [node, alt]}
+  var instance = index('id')
+  instance.add(node)
+
+  t.deepEqual(
+    [instance instanceof Index, instance.get(1)],
+    [true, [node]],
+    'index(key)'
+  )
+
+  instance = new Index('id')
+  instance.add(node)
+
+  t.deepEqual(
+    [instance instanceof Index, instance.get(1)],
+    [true, [node]],
+    'new Index(key)'
+  )
+
+  instance = index(keyFn)
+  instance.add(node)
+
+  t.deepEqual(
+    [instance instanceof Index, instance.get(1)],
+    [true, [node]],
+    'index(keyFn)'
+  )
+
+  instance = new Index(keyFn)
+  instance.add(node)
+
+  t.deepEqual(
+    [instance instanceof Index, instance.get(1)],
+    [true, [node]],
+    'new Index(keyFn)'
+  )
+
+  instance = index(tree, 'id')
+
+  t.deepEqual(
+    [instance instanceof Index, instance.get(1)],
+    [true, [node, alt]],
+    'index(tree, key)'
+  )
+
+  instance = new Index(tree, keyFn)
+
+  t.deepEqual(
+    [instance instanceof Index, instance.get(1)],
+    [true, [node, alt]],
+    'new Index(tree, key)'
+  )
+
+  instance = index(tree, filter, 'id')
+
+  t.deepEqual(
+    [instance instanceof Index, instance.get(1)],
+    [true, [node]],
+    'index(tree, filter, key)'
+  )
+
+  instance = new Index(tree, filter, keyFn)
+
+  t.deepEqual(
+    [instance instanceof Index, instance.get(1)],
+    [true, [node]],
+    'new Index(tree, filter, key)'
+  )
+
+  t.end()
+
+  function keyFn(node) {
+    return node.id
+  }
+
+  function filter(node) {
+    return node.type === 'a'
+  }
+})
+
 test('index.add', function(t) {
   var ast = u('root', [u('node', {word: 'foo'}), u('node', {word: 'bar'})])
   var extraNode = u('node', {word: 'foo'})
