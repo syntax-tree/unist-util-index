@@ -13,6 +13,41 @@ npm install unist-util-index
 
 ## Usage
 
+```javascript
+var fs = require('fs')
+var remark = require('remark')
+var toString = require('mdast-util-to-string')
+var Index = require('unist-util-index')
+
+// Read this readme:
+var tree = remark.parse(fs.readFileSync('readme.md'))
+
+// Index on heading depth:
+var index = new Index(tree, 'heading', 'depth')
+
+console.log(index.get(1).map(toString))
+console.log(index.get(2).map(toString))
+
+index = new Index(tree, 'definition', 'identifier')
+
+console.log(index.get('unist').map(node => node.url))
+console.log(index.get('travis').map(node => node.url))
+```
+
+Yields:
+
+```js
+[ 'unist-util-index Build Status Coverage Status' ]
+[ 'Installation',
+  'Usage',
+  'API',
+  'Related',
+  'Contribute',
+  'License' ]
+[ 'https://github.com/syntax-tree/unist' ]
+[ 'https://travis-ci.org/syntax-tree/unist-util-index' ]
+```
+
 ## API
 
 ### `Index([tree[, filter]], prop|keyFn)`
