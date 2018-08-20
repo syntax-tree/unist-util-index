@@ -1,106 +1,110 @@
-[![npm](https://nodei.co/npm/unist-util-index.png)](https://npmjs.com/package/unist-util-index)
+# unist-util-index [![Build Status][travis-badge]][travis] [![Coverage Status][codecov-badge]][codecov]
 
-# unist-util-index
+Create mutable index mapping property values or computed keys back to
+[**unist**][unist] nodes.
 
-[![Build Status][travis-badge]][travis] [![Dependency Status][david-badge]][david]
+## Installation
 
-Create mutable index mapping property values or computed keys back to [Unist] nodes.
+[npm][]:
 
-[unist]: https://github.com/wooorm/unist
-
-[travis]: https://travis-ci.org/eush77/unist-util-index
-[travis-badge]: https://travis-ci.org/eush77/unist-util-index.svg?branch=master
-[david]: https://david-dm.org/eush77/unist-util-index
-[david-badge]: https://david-dm.org/eush77/unist-util-index.png
-
-## Example
-
-Headings by depth:
-
-```js
-var Index = require('unist-util-index'),
-    fs = require('fs'),
-    remark = require('remark'),
-    toString = require('mdast-util-to-string');
-
-var ast = remark.parse(fs.readFileSync('README.md', 'utf8'));
-var index = Index(ast, 'heading', 'depth');
-
-index.get(1).map(toString)
-//=> [ 'unist-util-index' ]
-
-index.get(2).map(toString)
-//=> [ 'Example', 'API', 'Install', 'License' ]
-```
-
-Definitions by identifier:
-
-```js
-var index = Index(ast, 'definition', 'identifier');
-
-index.get('unist')
-//=> [ { type: 'definition',
-//       identifier: 'unist',
-//       title: null,
-//       url: 'https://github.com/wooorm/unist',
-//       position: Position { start: [Object], end: [Object], indent: [] } } ]
-
-index.get('travis')
-//=> [ { type: 'definition',
-//       identifier: 'travis',
-//       title: null,
-//       url: 'https://travis-ci.org/eush77/unist-util-index',
-//       position: Position { start: [Object], end: [Object], indent: [] } } ]
-```
-
-## API
-
-### `index = Index([ast, [filter]], key)`
-
-- `ast` — [Unist] tree.
-
-- `filter` — one of:
-  - node type (string);
-  - function invoked with arguments `(node, index?, parent?)`.
-
-- `key` — one of:
-  - property name (string);
-  - function invoked with argument `(node)`.
-
-Create index data structure that maps keys (returned by `key` function or property) to nodes.
-
-If `ast` argument is given, initialize index with `ast` nodes (recursively), optionally filter by node type or predicate.
-
-### `index.get(key)`
-
-- `key` — index key.
-
-Get nodes by `key`.
-
-Returns array of nodes.
-
-### `index.add(node)`
-
-- `node` — [Unist] node.
-
-Add `node` to index. No-op if `node` is already present in index.
-
-Returns `index`.
-
-### `index.remove(node)`
-
-- `node` — [Unist] node.
-
-Remove `node` from index. No-op if `node` is not present in index.
-
-Returns `index`.
-
-## Install
-
-```
+```bash
 npm install unist-util-index
 ```
 
+## Usage
+
+## API
+
+### `Index([tree[, filter]], prop|keyFn)`
+
+Create an index data structure that maps keys (calculated by `keyFn` function
+or the values at `prop` in each node) to a list of nodes.
+
+If `tree` is given, the index is initialised with all nodes, optionally
+filtered by `filter`.
+
+###### Signatures
+
+*   `Index(prop|keyFn)`
+*   `Index(tree, prop|keyFn)`
+*   `Index(tree, filter, prop|keyFn)`
+
+###### Parameters
+
+*   `tree` ([`Node`][node])
+*   `filter` (`*`) — [`is`][is]-compatible test
+*   `prop` (`string`) — Property to look up in each node to find keys
+*   `keyFn` ([`Function`][keyfn]) — Function called with each node to calculate
+    keys
+
+###### Returns
+
+`Index` — an index instance.
+
+#### `function keyFn(node)`
+
+Function called with every added [node][] to return the value to index on.
+
+#### `Index#get(key)`
+
+Get nodes by `key` (`*`).
+Returns a list of zero or more nodes ([`Array.<Node>`][node]).
+
+#### `Index#add(node)`
+
+Add [`node`][node] to the index (if not already present).
+
+#### `Index#remove(node)`
+
+Remove [`node`][node] from the index (if present).
+
+## Related
+
+*   [`unist-util-is`](https://github.com/syntax-tree/unist-util-is)
+    — Utility to check if a node passes a test
+*   [`unist-util-visit`](https://github.com/syntax-tree/unist-util-visit)
+    — Utility to recursively walk over nodes
+*   [`unist-util-map`](https://github.com/syntax-tree/unist-util-map)
+    — Create a new tree by mapping by the provided function
+*   [`unist-util-flatmap`](https://gitlab.com/staltz/unist-util-flatmap)
+    — Create a new tree by mapping and then flattening
+*   [`unist-util-select`](https://github.com/syntax-tree/unist-util-select)
+    — Select nodes with CSS-like selectors
+
+## Contribute
+
+See [`contributing.md` in `syntax-tree/unist`][contributing] for ways to get
+started.
+
+This organisation has a [Code of Conduct][coc].  By interacting with this
+repository, organisation, or community you agree to abide by its terms.
+
 ## License
 
-MIT
+[MIT][license] © Eugene Sharygin
+
+<!-- Definitions -->
+
+[travis-badge]: https://img.shields.io/travis/syntax-tree/unist-util-index.svg
+
+[travis]: https://travis-ci.org/syntax-tree/unist-util-index
+
+[codecov-badge]: https://img.shields.io/codecov/c/github/syntax-tree/unist-util-index.svg
+
+[codecov]: https://codecov.io/github/syntax-tree/unist-util-indexs
+
+[npm]: https://docs.npmjs.com/cli/install
+
+[license]: license
+
+[contributing]: https://github.com/syntax-tree/unist/blob/master/contributing.md
+
+[coc]: https://github.com/syntax-tree/unist/blob/master/code-of-conduct.md
+
+[unist]: https://github.com/syntax-tree/unist
+
+[node]: https://github.com/syntax-tree/unist#node
+
+[is]: https://github.com/syntax-tree/unist-util-is
+
+[keyfn]: #function-keyfnnode
