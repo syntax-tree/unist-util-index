@@ -1,6 +1,6 @@
 {
   "name": "unist-util-index",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Index Unist nodes by property or computed key",
   "license": "MIT",
   "keywords": [
