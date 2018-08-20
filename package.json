@@ -43,7 +43,7 @@
   },
   "scripts": {
     "format": "prettier --write \"**/*.js\" && xo --fix",
-    "test": "tape test/*.js"
+    "test": "node test"
   },
   "prettier": {
     "tabWidth": 2,
