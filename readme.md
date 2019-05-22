@@ -8,20 +8,20 @@
 [![Backers][backers-badge]][collective]
 [![Chat][chat-badge]][chat]
 
-Create mutable index mapping property values or computed keys back to
-[**unist**][unist] nodes.
+[**unist**][unist] utility to create a mutable index mapping property values or
+computed keys back to nodes.
 
-## Installation
+## Install
 
 [npm][]:
 
-```bash
+```sh
 npm install unist-util-index
 ```
 
 ## Usage
 
-```javascript
+```js
 var fs = require('fs')
 var remark = require('remark')
 var toString = require('mdast-util-to-string')
@@ -33,50 +33,42 @@ var tree = remark.parse(fs.readFileSync('readme.md'))
 // Index on heading depth:
 var index = new Index(tree, 'heading', 'depth')
 
-console.log(index.get(1).map(toString))
 console.log(index.get(2).map(toString))
 
 // Index on definition identifier:
 index = new Index(tree, 'definition', 'identifier')
 
 console.log(index.get('unist').map(node => node.url))
-console.log(index.get('travis').map(node => node.url))
 ```
 
 Yields:
 
 ```js
-[ 'unist-util-index Build Status Coverage Status' ]
-[ 'Installation',
-  'Usage',
-  'API',
-  'Related',
-  'Contribute',
-  'License' ]
+[ 'Install', 'Usage', 'API', 'Related', 'Contribute', 'License' ]
 [ 'https://github.com/syntax-tree/unist' ]
-[ 'https://travis-ci.org/syntax-tree/unist-util-index' ]
 ```
 
 ## API
 
-### `Index([tree, [filter, ]]prop|keyFn)`
+### `Index([tree[, test], ]prop|keyFn)`
 
 Create an index data structure that maps keys (calculated by `keyFn` function
 or the values at `prop` in each node) to a list of nodes.
 
 If `tree` is given, the index is initialised with all nodes, optionally
-filtered by `filter`.
+filtered by `test`.
 
 ###### Signatures
 
 *   `Index(prop|keyFn)`
 *   `Index(tree, prop|keyFn)`
-*   `Index(tree, filter, prop|keyFn)`
+*   `Index(tree, test, prop|keyFn)`
 
 ###### Parameters
 
-*   `tree` ([`Node`][node])
-*   `filter` (`*`) — [`is`][is]-compatible test
+*   `tree` ([`Node?`][node]) — [Tree][] to index
+*   `test` ([`Test`][is], optional) — [`is`][is]-compatible test (such as a
+    [type][])
 *   `prop` (`string`) — Property to look up in each node to find keys
 *   `keyFn` ([`Function`][keyfn]) — Function called with each node to calculate
     keys
@@ -87,7 +79,7 @@ filtered by `filter`.
 
 #### `function keyFn(node)`
 
-Function called with every added [node][] to return the value to index on.
+Function called with every added [node][] to return the key to index on.
 
 #### `Index#get(key)`
 
@@ -117,11 +109,13 @@ Remove [`node`][node] from the index (if present).
 
 ## Contribute
 
-See [`contributing.md` in `syntax-tree/unist`][contributing] for ways to get
+See [`contributing.md` in `syntax-tree/.github`][contributing] for ways to get
 started.
+See [`support.md`][support] for ways to get help.
 
-This organisation has a [Code of Conduct][coc].  By interacting with this
-repository, organisation, or community you agree to abide by its terms.
+This project has a [Code of Conduct][coc].
+By interacting with this repository, organisation, or community you agree to
+abide by its terms.
 
 ## License
 
@@ -159,13 +153,19 @@ repository, organisation, or community you agree to abide by its terms.
 
 [license]: license
 
-[contributing]: https://github.com/syntax-tree/unist/blob/master/contributing.md
+[contributing]: https://github.com/syntax-tree/.github/blob/master/contributing.md
 
-[coc]: https://github.com/syntax-tree/unist/blob/master/code-of-conduct.md
+[support]: https://github.com/syntax-tree/.github/blob/master/support.md
+
+[coc]: https://github.com/syntax-tree/.github/blob/master/code-of-conduct.md
 
 [unist]: https://github.com/syntax-tree/unist
 
 [node]: https://github.com/syntax-tree/unist#node
+
+[tree]: https://github.com/syntax-tree/unist#tree
+
+[type]: https://github.com/syntax-tree/unist#type
 
 [is]: https://github.com/syntax-tree/unist-util-is
 
