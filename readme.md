@@ -19,7 +19,7 @@ computed keys back to nodes.
 npm install unist-util-index
 ```
 
-## Usage
+## Use
 
 ```js
 var fs = require('fs')
@@ -52,11 +52,11 @@ Yields:
 
 ### `Index([tree[, test], ]prop|keyFn)`
 
-Create an index data structure that maps keys (calculated by `keyFn` function
-or the values at `prop` in each node) to a list of nodes.
+Create an index data structure that maps keys (calculated by `keyFn` function or
+the values at `prop` in each node) to a list of nodes.
 
-If `tree` is given, the index is initialised with all nodes, optionally
-filtered by `test`.
+If `tree` is given, the index is initialized with all nodes, optionally filtered
+by `test`.
 
 ###### Signatures
 
