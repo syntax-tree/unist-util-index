@@ -27,7 +27,7 @@ var remark = require('remark')
 var toString = require('mdast-util-to-string')
 var Index = require('unist-util-index')
 
-// Read this readme:
+// Parse and read this repo’s readme:
 var tree = remark.parse(fs.readFileSync('readme.md'))
 
 // Index on heading depth:
@@ -44,7 +44,7 @@ console.log(index.get('unist').map(node => node.url))
 Yields:
 
 ```js
-[ 'Install', 'Usage', 'API', 'Related', 'Contribute', 'License' ]
+[ 'Install', 'Use', 'API', 'Related', 'Contribute', 'License' ]
 [ 'https://github.com/syntax-tree/unist' ]
 ```
 
