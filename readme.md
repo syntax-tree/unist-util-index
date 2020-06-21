@@ -27,7 +27,7 @@ var remark = require('remark')
 var toString = require('mdast-util-to-string')
 var Index = require('unist-util-index')
 
-// parse the readme.md of this repo:
+// Parse and read this repo’s readme:
 var tree = remark.parse(fs.readFileSync('readme.md'))
 
 // Index on heading depth:
