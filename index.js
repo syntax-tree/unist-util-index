@@ -1,15 +1,11 @@
-'use strict'
-
-var Map = require('es6-map')
-var visit = require('unist-util-visit')
-
-module.exports = Index
+import Map from 'es6-map'
+import {visit} from 'unist-util-visit'
 
 Index.prototype.get = get
 Index.prototype.add = add
 Index.prototype.remove = remove
 
-function Index(tree, filter, prop) {
+export function Index(tree, filter, prop) {
   var self
 
   if (!(this instanceof Index)) {

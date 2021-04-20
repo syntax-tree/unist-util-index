@@ -13,6 +13,9 @@ computed keys back to nodes.
 
 ## Install
 
+This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c):
+Node 12+ is needed to use it and it must be `import`ed instead of `require`d.
+
 [npm][]:
 
 ```sh
@@ -50,7 +53,10 @@ Yields:
 
 ## API
 
-### `Index([tree[, test], ]prop|keyFn)`
+This package exports the following identifiers: `Index`.
+There is no default export.
+
+### `class Index([tree[, test], ]prop|keyFn)`
 
 Create an index data structure that maps keys (calculated by `keyFn` function or
 the values at `prop` in each node) to a list of nodes.
@@ -60,9 +66,9 @@ by `test`.
 
 ###### Signatures
 
-*   `Index(prop|keyFn)`
-*   `Index(tree, prop|keyFn)`
-*   `Index(tree, test, prop|keyFn)`
+*   `new Index(prop|keyFn)`
+*   `new Index(tree, prop|keyFn)`
+*   `new Index(tree, test, prop|keyFn)`
 
 ###### Parameters
 

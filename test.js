@@ -1,9 +1,7 @@
-'use strict'
-
-var test = require('tape')
-var u = require('unist-builder')
-var select = require('unist-util-select').select
-var Index = require('.')
+import test from 'tape'
+import {u} from 'unist-builder'
+import {select} from 'unist-util-select'
+import {Index} from './index.js'
 
 var index = Index
 
