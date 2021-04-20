@@ -1,25 +1,48 @@
+/**
+ * @typedef {import('unist').Node} Node
+ * @typedef {import('unist-util-visit').Type} Type
+ * @typedef {import('unist-util-visit').Props} Props
+ * @typedef {import('unist-util-visit').TestFunctionAnything} TestFunctionAnything
+ *
+ * @typedef {(node: Node) => unknown} KeyFunction
+ */
+
 import {visit} from 'unist-util-visit'
 
 export class Index {
-  constructor(prop, tree, filter) {
-    if (filter === null || filter === undefined) {
-      filter = trueConst
-    }
-
+  /**
+   * @param {string|KeyFunction} prop
+   * @param {Node} [tree]
+   * @param {null|undefined|Type|Props|TestFunctionAnything|Array<Type|Props|TestFunctionAnything>} [test]
+   */
+  constructor(prop, tree, test) {
+    /** @type {Map.<unknown, Array.<Node>>} */
     this.index = new Map()
-    this.keyfn = typeof prop === 'string' ? (node) => node[prop] : prop
+    /** @type {KeyFunction} */
+    this.key =
+      typeof prop === 'string' ? (/** @type {Node} */ node) => node[prop] : prop
 
     if (tree) {
-      visit(tree, filter, (node) => this.add(node))
+      visit(tree, test, (/** @type {Node} */ node) => {
+        this.add(node)
+      })
     }
   }
 
+  /**
+   * @param {unknown} key
+   * @returns {Array.<Node>}
+   */
   get(key) {
     return this.index.get(key) || []
   }
 
+  /**
+   * @param {Node} node
+   */
   add(node) {
-    var key = this.keyfn(node)
+    var key = this.key(node)
+    /** @type {Array.<Node>} */
     var nodes
 
     if (!this.index.has(key)) {
@@ -35,8 +58,11 @@ export class Index {
     return this
   }
 
+  /**
+   * @param {Node} node
+   */
   remove(node) {
-    var key = this.keyfn(node)
+    var key = this.key(node)
     var nodes = this.index.get(key)
     var pos = nodes ? nodes.indexOf(node) : -1
 
@@ -46,8 +72,4 @@ export class Index {
 
     return this
   }
-}
-
-function trueConst() {
-  return true
 }

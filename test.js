@@ -1,3 +1,8 @@
+/**
+ * @typedef {import('./index.js').KeyFunction} KeyFunction
+ * @typedef {import('./index.js').TestFunctionAnything} TestFunctionAnything
+ */
+
 import test from 'tape'
 import {u} from 'unist-builder'
 import {select} from 'unist-util-select'
@@ -43,10 +48,12 @@ test('Index', function (t) {
 
   t.end()
 
+  /** @type {KeyFunction} */
   function keyFn(node) {
     return node.id
   }
 
+  /** @type {TestFunctionAnything} */
   function filter(node) {
     return node.type === 'a'
   }
@@ -193,6 +200,7 @@ test('index.get', function (t) {
       sst.deepEqual(index.get('bar'), [select('node[word="bar"]', ast)])
       sst.end()
 
+      /** @type {TestFunctionAnything} */
       function filter(node, index, parent) {
         return 'word' in node && index < 2 && parent.type === 'root'
       }
@@ -202,15 +210,18 @@ test('index.get', function (t) {
   })
 
   t.test('computed keys', function (st) {
+    /**
+     * @typedef {{x: number, y: number, z: number}} FunkyNode
+     */
+
     var ast = u('root', {x: 0, y: 4, id: 0}, [
       u('node', {x: 3, y: 2, id: 1}),
       u('node', {x: 2, y: 2, id: 2}),
       u('node', {x: 3, y: 1, id: 3}),
       u('node', {x: 4, y: 1, id: 4})
     ])
-    var index
-
-    index = new Index(xPlusY, ast)
+    // @ts-ignore it’s fine
+    var index = new Index(xPlusY, ast)
     st.deepEqual(index.get(4), [
       select('[id=0]', ast),
       select('[id=2]', ast),
@@ -219,6 +230,7 @@ test('index.get', function (t) {
     st.deepEqual(index.get(0), [])
     st.deepEqual(index.get(5), [select('[id=1]', ast), select('[id=4]', ast)])
 
+    // @ts-ignore it’s fine
     st.deepEqual(new Index(xPlusY, ast, 'node').get(4), [
       select('[id=2]', ast),
       select('[id=3]', ast)
@@ -226,6 +238,9 @@ test('index.get', function (t) {
 
     st.end()
 
+    /**
+     * @param {FunkyNode} node
+     */
     function xPlusY(node) {
       return node.x + node.y
     }
