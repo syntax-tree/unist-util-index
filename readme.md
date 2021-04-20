@@ -34,12 +34,12 @@ var Index = require('unist-util-index')
 var tree = remark.parse(fs.readFileSync('readme.md'))
 
 // Index on heading depth:
-var index = new Index(tree, 'heading', 'depth')
+var index = new Index('depth', tree, 'heading')
 
 console.log(index.get(2).map(toString))
 
 // Index on definition identifier:
-index = new Index(tree, 'definition', 'identifier')
+index = new Index('identifier', tree, 'definition')
 
 console.log(index.get('unist').map(node => node.url))
 ```
@@ -56,7 +56,7 @@ Yields:
 This package exports the following identifiers: `Index`.
 There is no default export.
 
-### `class Index([tree[, test], ]prop|keyFn)`
+### `class Index(prop|keyFn[, tree[, test]])`
 
 Create an index data structure that maps keys (calculated by `keyFn` function or
 the values at `prop` in each node) to a list of nodes.
@@ -64,20 +64,14 @@ the values at `prop` in each node) to a list of nodes.
 If `tree` is given, the index is initialized with all nodes, optionally filtered
 by `test`.
 
-###### Signatures
-
-*   `new Index(prop|keyFn)`
-*   `new Index(tree, prop|keyFn)`
-*   `new Index(tree, test, prop|keyFn)`
-
 ###### Parameters
 
-*   `tree` ([`Node?`][node]) — [Tree][] to index
-*   `test` ([`Test`][is], optional) — [`is`][is]-compatible test (such as a
-    [type][])
 *   `prop` (`string`) — Property to look up in each node to find keys
 *   `keyFn` ([`Function`][keyfn]) — Function called with each node to calculate
     keys
+*   `tree` ([`Node?`][node]) — [Tree][] to index
+*   `test` ([`Test`][is], optional) — [`is`][is]-compatible test (such as a
+    [type][])
 
 ###### Returns
 

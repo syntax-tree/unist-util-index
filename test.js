@@ -25,20 +25,20 @@ test('Index', function (t) {
     'new Index(keyFn)'
   )
 
-  instance = new Index(tree, 'id')
+  instance = new Index('id', tree)
 
   t.deepEqual(
     [instance instanceof Index, instance.get(1)],
     [true, [node, alt]],
-    'new Index(tree, prop)'
+    'new Index(prop, tree)'
   )
 
-  instance = new Index(tree, filter, 'id')
+  instance = new Index('id', tree, filter)
 
   t.deepEqual(
     [instance instanceof Index, instance.get(1)],
     [true, [node]],
-    'new Index(tree, filter, prop)'
+    'new Index(prop, tree, filter)'
   )
 
   t.end()
@@ -56,7 +56,7 @@ test('index.add', function (t) {
   var ast = u('root', [u('node', {word: 'foo'}), u('node', {word: 'bar'})])
   var extraNode = u('node', {word: 'foo'})
 
-  var index = new Index(ast, 'word')
+  var index = new Index('word', ast)
   t.deepEqual(index.get('foo'), [select('[word=foo]', ast)])
 
   var result = index.add(extraNode)
@@ -98,7 +98,7 @@ test('index.get', function (t) {
       ])
     ])
 
-    var index = new Index(ast, 'color')
+    var index = new Index('color', ast)
 
     st.deepEqual(index.get('black'), [
       select('[id=0]', ast),
@@ -132,7 +132,7 @@ test('index.get', function (t) {
         u('node', {word: 'constructor', id: 1}),
         u('node', {word: 'toString', id: 2})
       ])
-      var index = new Index(ast, 'word')
+      var index = new Index('word', ast)
 
       sst.deepEqual(index.get('__proto__'), [select('[id=0]', ast)])
       sst.deepEqual(index.get('constructor'), [select('[id=1]', ast)])
@@ -151,7 +151,7 @@ test('index.get', function (t) {
         u('node', {word: id1, id: 4}),
         u('node', {word: id2, id: 5})
       ])
-      var index = new Index(ast, 'word')
+      var index = new Index('word', ast)
 
       sst.deepEqual(index.get(false), [select('[id=0]', ast)])
       sst.deepEqual(index.get('false'), [select('[id=1]', ast)])
@@ -167,7 +167,7 @@ test('index.get', function (t) {
   })
 
   t.test('empty index', function (st) {
-    st.deepEqual(new Index(null, 'foo').get('bar'), [])
+    st.deepEqual(new Index('foo', null).get('bar'), [])
     st.deepEqual(new Index('foo').get('bar'), [])
     st.end()
   })
@@ -181,14 +181,14 @@ test('index.get', function (t) {
     ])
 
     st.test('type test', function (sst) {
-      var index = new Index(ast, 'node', 'word')
+      var index = new Index('word', ast, 'node')
       sst.deepEqual(index.get('foo'), [select('node[word="foo"]', ast)])
       sst.deepEqual(index.get('bar'), [select('node[word="bar"]', ast)])
       sst.end()
     })
 
     st.test('function test', function (sst) {
-      var index = new Index(ast, filter, 'word')
+      var index = new Index('word', ast, filter)
       sst.deepEqual(index.get('foo'), [select('node[word="foo"]', ast)])
       sst.deepEqual(index.get('bar'), [select('node[word="bar"]', ast)])
       sst.end()
@@ -210,7 +210,7 @@ test('index.get', function (t) {
     ])
     var index
 
-    index = new Index(ast, xPlusY)
+    index = new Index(xPlusY, ast)
     st.deepEqual(index.get(4), [
       select('[id=0]', ast),
       select('[id=2]', ast),
@@ -219,7 +219,7 @@ test('index.get', function (t) {
     st.deepEqual(index.get(0), [])
     st.deepEqual(index.get(5), [select('[id=1]', ast), select('[id=4]', ast)])
 
-    st.deepEqual(new Index(ast, 'node', xPlusY).get(4), [
+    st.deepEqual(new Index(xPlusY, ast, 'node').get(4), [
       select('[id=2]', ast),
       select('[id=3]', ast)
     ])
@@ -241,7 +241,7 @@ test('index.remove', function (t) {
     u('node', {word: 'bar'})
   ])
 
-  var index = new Index(ast, 'word')
+  var index = new Index('word', ast)
   t.deepEqual(index.get('foo'), [
     select('bad[word=foo]', ast),
     select('node[word=foo]', ast)

@@ -1,22 +1,13 @@
 import {visit} from 'unist-util-visit'
 
 export class Index {
-  constructor(tree, filter, prop) {
-    var pluck = (node) => node[prop]
-
-    if (prop === null || prop === undefined) {
-      if (filter === null || filter === undefined) {
-        prop = tree
-        tree = null
-      } else {
-        prop = filter
-      }
-
+  constructor(prop, tree, filter) {
+    if (filter === null || filter === undefined) {
       filter = trueConst
     }
 
     this.index = new Map()
-    this.keyfn = typeof prop === 'string' ? pluck : prop
+    this.keyfn = typeof prop === 'string' ? (node) => node[prop] : prop
 
     if (tree) {
       visit(tree, filter, (node) => this.add(node))
