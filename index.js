@@ -1,80 +1,60 @@
 import {visit} from 'unist-util-visit'
 
-Index.prototype.get = get
-Index.prototype.add = add
-Index.prototype.remove = remove
+export class Index {
+  constructor(tree, filter, prop) {
+    var pluck = (node) => node[prop]
 
-export function Index(tree, filter, prop) {
-  var self
+    if (prop === null || prop === undefined) {
+      if (filter === null || filter === undefined) {
+        prop = tree
+        tree = null
+      } else {
+        prop = filter
+      }
 
-  if (!(this instanceof Index)) {
-    return new Index(tree, filter, prop)
-  }
-
-  if (prop === null || prop === undefined) {
-    if (filter === null || filter === undefined) {
-      prop = tree
-      tree = null
-    } else {
-      prop = filter
+      filter = trueConst
     }
 
-    filter = trueConst
+    this.index = new Map()
+    this.keyfn = typeof prop === 'string' ? pluck : prop
+
+    if (tree) {
+      visit(tree, filter, (node) => this.add(node))
+    }
   }
 
-  self = this
-
-  this.index = new Map()
-  this.keyfn = typeof prop === 'string' ? pluck : prop
-
-  if (tree) {
-    visit(tree, filter, add)
+  get(key) {
+    return this.index.get(key) || []
   }
 
-  return this
+  add(node) {
+    var key = this.keyfn(node)
+    var nodes
 
-  function pluck(node) {
-    return node[prop]
+    if (!this.index.has(key)) {
+      this.index.set(key, [])
+    }
+
+    nodes = this.index.get(key)
+
+    if (!nodes.includes(node)) {
+      nodes.push(node)
+    }
+
+    return this
   }
 
-  function add(node) {
-    self.add(node)
+  remove(node) {
+    var key = this.keyfn(node)
+    var nodes = this.index.get(key)
+    var pos = nodes ? nodes.indexOf(node) : -1
+
+    if (pos !== -1) {
+      nodes.splice(pos, 1)
+    }
+
+    return this
   }
-}
-
-function get(key) {
-  return this.index.get(key) || []
-}
-
-function add(node) {
-  var self = this
-  var key = self.keyfn(node)
-  var nodes
-
-  if (!self.index.has(key)) {
-    self.index.set(key, [])
-  }
-
-  nodes = self.index.get(key)
-
-  if (nodes.indexOf(node) === -1) {
-    nodes.push(node)
-  }
-
-  return self
-}
-
-function remove(node) {
-  var self = this
-  var key = self.keyfn(node)
-  var nodes = self.index.get(key)
-  var pos = nodes ? nodes.indexOf(node) : -1
-
-  if (pos !== -1) {
-    nodes.splice(pos, 1)
-  }
-
-  return self
 }
 
 function trueConst() {

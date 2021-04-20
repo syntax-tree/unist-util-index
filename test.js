@@ -3,37 +3,17 @@ import {u} from 'unist-builder'
 import {select} from 'unist-util-select'
 import {Index} from './index.js'
 
-var index = Index
-
 test('Index', function (t) {
   var node = {type: 'a', id: 1}
   var alt = {type: 'b', id: 1}
   var tree = {type: 'root', children: [node, alt]}
-  var instance = index('id')
-  instance.add(node)
-
-  t.deepEqual(
-    [instance instanceof Index, instance.get(1)],
-    [true, [node]],
-    'index(prop)'
-  )
-
-  instance = new Index('id')
+  var instance = new Index('id')
   instance.add(node)
 
   t.deepEqual(
     [instance instanceof Index, instance.get(1)],
     [true, [node]],
     'new Index(prop)'
-  )
-
-  instance = index(keyFn)
-  instance.add(node)
-
-  t.deepEqual(
-    [instance instanceof Index, instance.get(1)],
-    [true, [node]],
-    'index(keyFn)'
   )
 
   instance = new Index(keyFn)
@@ -45,28 +25,12 @@ test('Index', function (t) {
     'new Index(keyFn)'
   )
 
-  instance = index(tree, 'id')
-
-  t.deepEqual(
-    [instance instanceof Index, instance.get(1)],
-    [true, [node, alt]],
-    'index(tree, prop)'
-  )
-
   instance = new Index(tree, 'id')
 
   t.deepEqual(
     [instance instanceof Index, instance.get(1)],
     [true, [node, alt]],
     'new Index(tree, prop)'
-  )
-
-  instance = index(tree, filter, 'id')
-
-  t.deepEqual(
-    [instance instanceof Index, instance.get(1)],
-    [true, [node]],
-    'index(tree, filter, prop)'
   )
 
   instance = new Index(tree, filter, 'id')
