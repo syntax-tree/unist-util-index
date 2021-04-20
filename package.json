@@ -39,7 +39,6 @@
     "index.js"
   ],
   "dependencies": {
-    "es6-map": "^0.1.0",
     "unist-util-visit": "^3.0.0"
   },
   "devDependencies": {

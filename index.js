@@ -1,4 +1,3 @@
-import Map from 'es6-map'
 import {visit} from 'unist-util-visit'
 
 Index.prototype.get = get
