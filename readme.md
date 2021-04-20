@@ -25,10 +25,10 @@ npm install unist-util-index
 ## Use
 
 ```js
-var fs = require('fs')
-var remark = require('remark')
-var toString = require('mdast-util-to-string')
-var Index = require('unist-util-index')
+import fs from 'fs'
+import remark from 'remark'
+import toString from 'mdast-util-to-string'
+import {Index} from 'unist-util-index'
 
 // Parse and read this repo’s readme:
 var tree = remark.parse(fs.readFileSync('readme.md'))
