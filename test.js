@@ -1,6 +1,7 @@
 /**
+ * @typedef {import('./index.js').Node} Node
  * @typedef {import('./index.js').KeyFunction} KeyFunction
- * @typedef {import('./index.js').TestFunctionAnything} TestFunctionAnything
+ * @typedef {import('./index.js').Test} Test
  */
 
 import test from 'tape'
@@ -53,7 +54,7 @@ test('Index', function (t) {
     return node.id
   }
 
-  /** @type {TestFunctionAnything} */
+  /** @param {Node} node */
   function filter(node) {
     return node.type === 'a'
   }
@@ -200,7 +201,11 @@ test('index.get', function (t) {
       sst.deepEqual(index.get('bar'), [select('node[word="bar"]', ast)])
       sst.end()
 
-      /** @type {TestFunctionAnything} */
+      /**
+       * @param {Node} node
+       * @param {number} index
+       * @param {Node} parent
+       */
       function filter(node, index, parent) {
         return 'word' in node && index < 2 && parent.type === 'root'
       }

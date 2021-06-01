@@ -1,8 +1,6 @@
 /**
  * @typedef {import('unist').Node} Node
- * @typedef {import('unist-util-visit').Type} Type
- * @typedef {import('unist-util-visit').Props} Props
- * @typedef {import('unist-util-visit').TestFunctionAnything} TestFunctionAnything
+ * @typedef {import('unist-util-visit').Test} Test
  *
  * @typedef {(node: Node) => unknown} KeyFunction
  */
@@ -13,7 +11,7 @@ export class Index {
   /**
    * @param {string|KeyFunction} prop
    * @param {Node} [tree]
-   * @param {null|undefined|Type|Props|TestFunctionAnything|Array<Type|Props|TestFunctionAnything>} [test]
+   * @param {Test} [test]
    */
   constructor(prop, tree, test) {
     /** @type {Map.<unknown, Array.<Node>>} */
