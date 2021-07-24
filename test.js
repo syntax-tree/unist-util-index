@@ -9,11 +9,11 @@ import {u} from 'unist-builder'
 import {select} from 'unist-util-select'
 import {Index} from './index.js'
 
-test('Index', function (t) {
-  var node = {type: 'a', id: 1}
-  var alt = {type: 'b', id: 1}
-  var tree = {type: 'root', children: [node, alt]}
-  var instance = new Index('id')
+test('Index', (t) => {
+  const node = {type: 'a', id: 1}
+  const alt = {type: 'b', id: 1}
+  const tree = {type: 'root', children: [node, alt]}
+  let instance = new Index('id')
   instance.add(node)
 
   t.deepEqual(
@@ -55,14 +55,14 @@ test('Index', function (t) {
   t.end()
 })
 
-test('index.add', function (t) {
-  var ast = u('root', [u('node', {word: 'foo'}), u('node', {word: 'bar'})])
-  var extraNode = u('node', {word: 'foo'})
+test('index.add', (t) => {
+  const ast = u('root', [u('node', {word: 'foo'}), u('node', {word: 'bar'})])
+  const extraNode = u('node', {word: 'foo'})
 
-  var index = new Index('word', ast)
+  const index = new Index('word', ast)
   t.deepEqual(index.get('foo'), [select('[word=foo]', ast)])
 
-  var result = index.add(extraNode)
+  const result = index.add(extraNode)
   t.deepEqual(index.get('foo'), [select('[word=foo]', ast), extraNode])
 
   t.equal(result, index, 'returns this')
@@ -76,9 +76,9 @@ test('index.add', function (t) {
   t.end()
 })
 
-test('index.get', function (t) {
-  t.test('get', function (st) {
-    var ast = u('node', {color: 'black', id: 0}, [
+test('index.get', (t) => {
+  t.test('get', (st) => {
+    const ast = u('node', {color: 'black', id: 0}, [
       u('node', {color: 'black', id: 1}, [
         u('node', {color: 'red', id: 2}, [
           u('node', {color: 'black', id: 3}),
@@ -101,7 +101,7 @@ test('index.get', function (t) {
       ])
     ])
 
-    var index = new Index('color', ast)
+    const index = new Index('color', ast)
 
     st.deepEqual(index.get('black'), [
       select('[id=0]', ast),
@@ -129,13 +129,13 @@ test('index.get', function (t) {
     st.end()
   })
 
-  t.test('degenerate keys', function (st) {
-    st.test('Object.prototype keys', function (sst) {
-      var ast = u('node', {word: '__proto__', id: 0}, [
+  t.test('degenerate keys', (st) => {
+    st.test('Object.prototype keys', (sst) => {
+      const ast = u('node', {word: '__proto__', id: 0}, [
         u('node', {word: 'constructor', id: 1}),
         u('node', {word: 'toString', id: 2})
       ])
-      var index = new Index('word', ast)
+      const index = new Index('word', ast)
 
       sst.deepEqual(index.get('__proto__'), [select('[id=0]', ast)])
       sst.deepEqual(index.get('constructor'), [select('[id=1]', ast)])
@@ -143,10 +143,10 @@ test('index.get', function (t) {
       sst.end()
     })
 
-    st.test('identity keys', function (sst) {
-      var id1 = {foo: 'bar'}
-      var id2 = {foo: 'bar'}
-      var ast = u('root', [
+    st.test('identity keys', (sst) => {
+      const id1 = {foo: 'bar'}
+      const id2 = {foo: 'bar'}
+      const ast = u('root', [
         u('node', {word: false, id: 0}),
         u('node', {word: 'false', id: 1}),
         u('node', {word: 1, id: 2}),
@@ -154,7 +154,7 @@ test('index.get', function (t) {
         u('node', {word: id1, id: 4}),
         u('node', {word: id2, id: 5})
       ])
-      var index = new Index('word', ast)
+      const index = new Index('word', ast)
 
       sst.deepEqual(index.get(false), [select('[id=0]', ast)])
       sst.deepEqual(index.get('false'), [select('[id=1]', ast)])
@@ -169,29 +169,29 @@ test('index.get', function (t) {
     st.end()
   })
 
-  t.test('empty index', function (st) {
+  t.test('empty index', (st) => {
     st.deepEqual(new Index('foo', null).get('bar'), [])
     st.deepEqual(new Index('foo').get('bar'), [])
     st.end()
   })
 
-  t.test('Index filter', function (st) {
-    var ast = u('root', [
+  t.test('Index filter', (st) => {
+    const ast = u('root', [
       u('node', {word: 'foo'}),
       u('node', {word: 'bar'}),
       u('skip', {word: 'foo'}),
       u('skip', {word: 'bar'})
     ])
 
-    st.test('type test', function (sst) {
-      var index = new Index('word', ast, 'node')
+    st.test('type test', (sst) => {
+      const index = new Index('word', ast, 'node')
       sst.deepEqual(index.get('foo'), [select('node[word="foo"]', ast)])
       sst.deepEqual(index.get('bar'), [select('node[word="bar"]', ast)])
       sst.end()
     })
 
-    st.test('function test', function (sst) {
-      var index = new Index('word', ast, filter)
+    st.test('function test', (sst) => {
+      const index = new Index('word', ast, filter)
       sst.deepEqual(index.get('foo'), [select('node[word="foo"]', ast)])
       sst.deepEqual(index.get('bar'), [select('node[word="bar"]', ast)])
       sst.end()
@@ -209,19 +209,19 @@ test('index.get', function (t) {
     st.end()
   })
 
-  t.test('computed keys', function (st) {
+  t.test('computed keys', (st) => {
     /**
      * @typedef {{x: number, y: number, z: number}} FunkyNode
      */
 
-    var ast = u('root', {x: 0, y: 4, id: 0}, [
+    const ast = u('root', {x: 0, y: 4, id: 0}, [
       u('node', {x: 3, y: 2, id: 1}),
       u('node', {x: 2, y: 2, id: 2}),
       u('node', {x: 3, y: 1, id: 3}),
       u('node', {x: 4, y: 1, id: 4})
     ])
     // @ts-ignore it’s fine
-    var index = new Index(xPlusY, ast)
+    const index = new Index(xPlusY, ast)
     st.deepEqual(index.get(4), [
       select('[id=0]', ast),
       select('[id=2]', ast),
@@ -249,20 +249,20 @@ test('index.get', function (t) {
   t.end()
 })
 
-test('index.remove', function (t) {
-  var ast = u('root', [
+test('index.remove', (t) => {
+  const ast = u('root', [
     u('bad', {word: 'foo'}),
     u('node', {word: 'foo'}),
     u('node', {word: 'bar'})
   ])
 
-  var index = new Index('word', ast)
+  const index = new Index('word', ast)
   t.deepEqual(index.get('foo'), [
     select('bad[word=foo]', ast),
     select('node[word=foo]', ast)
   ])
 
-  var result = index.remove(select('bad', ast))
+  const result = index.remove(select('bad', ast))
   t.deepEqual(index.get('foo'), [select('node[word=foo]', ast)])
 
   t.equal(result, index, 'returns this')

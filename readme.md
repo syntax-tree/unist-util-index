@@ -25,23 +25,23 @@ npm install unist-util-index
 ## Use
 
 ```js
-import fs from 'fs'
-import remark from 'remark'
-import toString from 'mdast-util-to-string'
+import fs from 'node:fs'
+import {remark} from 'remark'
+import {toString} from 'mdast-util-to-string'
 import {Index} from 'unist-util-index'
 
 // Parse and read this repo’s readme:
-var tree = remark.parse(fs.readFileSync('readme.md'))
+const tree = remark.parse(fs.readFileSync('readme.md'))
 
 // Index on heading depth:
-var index = new Index('depth', tree, 'heading')
+const indexOnDepth = new Index('depth', tree, 'heading')
 
-console.log(index.get(2).map(toString))
+console.log(indexOnDepth.get(2).map(toString))
 
 // Index on definition identifier:
-index = new Index('identifier', tree, 'definition')
+const indexOnIdentifier = new Index('identifier', tree, 'definition')
 
-console.log(index.get('unist').map(node => node.url))
+console.log(indexOnIdentifier.get('unist').map(node => node.url))
 ```
 
 Yields:
