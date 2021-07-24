@@ -22,7 +22,12 @@ test('Index', function (t) {
     'new Index(prop)'
   )
 
-  instance = new Index(keyFn)
+  instance = new Index(
+    /**
+     * @param {Node & {id: string}} node
+     */
+    (node) => node.id
+  )
   instance.add(node)
 
   t.deepEqual(
@@ -39,7 +44,7 @@ test('Index', function (t) {
     'new Index(prop, tree)'
   )
 
-  instance = new Index('id', tree, filter)
+  instance = new Index('id', tree, (node) => node.type === 'a')
 
   t.deepEqual(
     [instance instanceof Index, instance.get(1)],
@@ -48,16 +53,6 @@ test('Index', function (t) {
   )
 
   t.end()
-
-  /** @type {KeyFunction} */
-  function keyFn(node) {
-    return node.id
-  }
-
-  /** @param {Node} node */
-  function filter(node) {
-    return node.type === 'a'
-  }
 })
 
 test('index.add', function (t) {
