@@ -2,6 +2,7 @@
  * @typedef {import('./index.js').Node} Node
  * @typedef {import('./index.js').KeyFunction} KeyFunction
  * @typedef {import('./index.js').Test} Test
+ * @typedef {Node & {id: number}} IdNode
  */
 
 import test from 'tape'
@@ -22,12 +23,8 @@ test('Index', (t) => {
     'new Index(prop)'
   )
 
-  instance = new Index(
-    /**
-     * @param {Node & {id: string}} node
-     */
-    (node) => node.id
-  )
+  // @ts-expect-error: fine.
+  instance = new Index((/** @type {IdNode} */ node) => node.id)
   instance.add(node)
 
   t.deepEqual(
@@ -67,7 +64,8 @@ test('index.add', (t) => {
 
   t.equal(result, index, 'returns this')
 
-  index.add(select('[word=foo]', ast))
+  const node = select('[word=foo]', ast)
+  if (node) index.add(node)
   t.deepEqual(index.get('foo'), [select('[word=foo]', ast), extraNode])
 
   index.add(extraNode)
@@ -170,6 +168,7 @@ test('index.get', (t) => {
   })
 
   t.test('empty index', (st) => {
+    // @ts-expect-error: runtime.
     st.deepEqual(new Index('foo', null).get('bar'), [])
     st.deepEqual(new Index('foo').get('bar'), [])
     st.end()
@@ -191,19 +190,18 @@ test('index.get', (t) => {
     })
 
     st.test('function test', (sst) => {
-      const index = new Index('word', ast, filter)
+      const index = new Index('word', ast, (node, index, parent) =>
+        Boolean(
+          typeof index === 'number' &&
+            parent &&
+            'word' in node &&
+            index < 2 &&
+            parent.type === 'root'
+        )
+      )
       sst.deepEqual(index.get('foo'), [select('node[word="foo"]', ast)])
       sst.deepEqual(index.get('bar'), [select('node[word="bar"]', ast)])
       sst.end()
-
-      /**
-       * @param {Node} node
-       * @param {number} index
-       * @param {Node} parent
-       */
-      function filter(node, index, parent) {
-        return 'word' in node && index < 2 && parent.type === 'root'
-      }
     })
 
     st.end()
@@ -262,18 +260,24 @@ test('index.remove', (t) => {
     select('node[word=foo]', ast)
   ])
 
-  const result = index.remove(select('bad', ast))
+  let node = select('bad', ast)
+  if (!node) throw new Error('Expected `node`')
+  const result = index.remove(node)
   t.deepEqual(index.get('foo'), [select('node[word=foo]', ast)])
 
   t.equal(result, index, 'returns this')
 
-  index.remove(select('bad', ast))
+  node = select('bad', ast)
+  if (!node) throw new Error('Expected `node`')
+  index.remove(node)
   t.deepEqual(index.get('foo'), [select('node[word=foo]', ast)])
 
   index.remove(u('terrible', {word: 'baz'}))
   t.deepEqual(index.get('foo'), [select('node[word=foo]', ast)])
 
-  index.remove(select('node[word=foo]', ast))
+  node = select('node[word=foo]', ast)
+  if (!node) throw new Error('Expected `node`')
+  index.remove(node)
   t.deepEqual(index.get('foo'), [])
 
   t.end()
