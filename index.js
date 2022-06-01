@@ -14,7 +14,7 @@ export class Index {
    * @param {Test} [test]
    */
   constructor(prop, tree, test) {
-    /** @type {Map.<unknown, Array.<Node>>} */
+    /** @type {Map<unknown, Array<Node>>} */
     this.index = new Map()
     /** @type {KeyFunction} */
     // @ts-expect-error: Looks indexable.
@@ -29,7 +29,7 @@ export class Index {
 
   /**
    * @param {unknown} key
-   * @returns {Array.<Node>}
+   * @returns {Array<Node>}
    */
   get(key) {
     return this.index.get(key) || []

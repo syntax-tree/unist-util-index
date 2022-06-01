@@ -84,7 +84,7 @@ Function called with every added [node][] to return the key to index on.
 #### `Index#get(key)`
 
 Get nodes by `key` (`*`).
-Returns a list of zero or more nodes ([`Array.<Node>`][node]).
+Returns a list of zero or more nodes ([`Array<Node>`][node]).
 
 #### `Index#add(node)`
 
