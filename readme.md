@@ -118,7 +118,7 @@ by `test`.
 ###### Parameters
 
 *   `prop` (`string`)
-    — property to look up in each node to find keys
+    — field to look up in each node to find keys
 *   `keyFunction` ([`KeyFunction`][key-function])
     — function called with each node to calculate keys
 *   `tree` ([`Node`][node], optional)
@@ -154,7 +154,7 @@ Add `node` ([`Node`][node]) to the index (if not already present).
 
 ###### Returns
 
-Nothing (`void`).
+Current instance (`Index`).
 
 #### `Index#remove(node)`
 
@@ -162,7 +162,7 @@ Remove `node` ([`Node`][node]) from the index (if present).
 
 ###### Returns
 
-Nothing (`void`).
+Current instance (`Index`).
 
 ## Types
 

@@ -2,16 +2,33 @@
  * @typedef {import('unist').Node} Node
  * @typedef {import('unist-util-visit').Test} Test
  *
- * @typedef {(node: Node) => unknown} KeyFunction
+ * @callback KeyFunction
+ *   Function called with every added node (`Node`) to calculate the key to
+ *   index on.
+ * @param {Node} node
+ *   Node to calculate a key for.
+ * @returns {unknown}
+ *   Key to index on.
+ *   Can be anything that can be used as a key in a `Map`.
  */
 
 import {visit} from 'unist-util-visit'
 
 export class Index {
   /**
+   * Create a mutable index data structure, that maps property values or
+   * computed keys, to nodes.
+   *
+   * If `tree` is given, the index is initialized with all nodes, optionally
+   * filtered by `test`.
+   *
    * @param {string|KeyFunction} prop
+   *   Field (`string`) to look up in each node to find keys or function called
+   *   with each node to calculate keys.
    * @param {Node} [tree]
+   *   Tree to index.
    * @param {Test} [test]
+   *   `is`-compatible test.
    */
   constructor(prop, tree, test) {
     /** @type {Map<unknown, Array<Node>>} */
@@ -28,15 +45,25 @@ export class Index {
   }
 
   /**
+   * Get nodes by `key`.
+   *
    * @param {unknown} key
+   *   Key to retrieve.
+   *   Can be anything that can be used as a key in a `Map`.
    * @returns {Array<Node>}
+   *   List of zero or more nodes.
    */
   get(key) {
     return this.index.get(key) || []
   }
 
   /**
+   * Add `node` to the index (if not already present).
+   *
    * @param {Node} node
+   *   Node to index.
+   * @returns
+   *   Current instance.
    */
   add(node) {
     const key = this.key(node)
@@ -55,7 +82,12 @@ export class Index {
   }
 
   /**
+   * Remove `node` from the index (if present).
+   *
    * @param {Node} node
+   *   Node to remove.
+   * @returns
+   *   Current instance.
    */
   remove(node) {
     const key = this.key(node)
