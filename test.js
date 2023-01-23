@@ -1,7 +1,5 @@
 /**
- * @typedef {import('./index.js').Node} Node
- * @typedef {import('./index.js').KeyFunction} KeyFunction
- * @typedef {import('./index.js').Test} Test
+ * @typedef {import('unist').Node} Node
  * @typedef {Node & {id: number}} IdNode
  */
 
