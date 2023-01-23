@@ -21,7 +21,7 @@ test('Index', (t) => {
     'new Index(prop)'
   )
 
-  // @ts-expect-error: fine.
+  // @ts-expect-error: Look for nodes with an `id`.
   instance = new Index((/** @type {IdNode} */ node) => node.id)
   instance.add(node)
 
@@ -166,7 +166,6 @@ test('index.get', (t) => {
   })
 
   t.test('empty index', (st) => {
-    // @ts-expect-error: runtime.
     st.deepEqual(new Index('foo', null).get('bar'), [])
     st.deepEqual(new Index('foo').get('bar'), [])
     st.end()
