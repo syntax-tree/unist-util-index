@@ -8,8 +8,15 @@ import test from 'node:test'
 import {u} from 'unist-builder'
 import {select} from 'unist-util-select'
 import {Index} from './index.js'
+import * as mod from './index.js'
 
 test('core', () => {
+  assert.deepEqual(
+    Object.keys(mod).sort(),
+    ['Index'],
+    'should expose the public api'
+  )
+
   const node = {type: 'a', id: 1}
   const alt = {type: 'b', id: 1}
   const tree = {type: 'root', children: [node, alt]}
