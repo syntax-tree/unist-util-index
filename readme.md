@@ -18,6 +18,8 @@
 *   [Use](#use)
 *   [API](#api)
     *   [`Index(prop|keyFunction[, tree[, test]])`](#indexpropkeyfunction-tree-test)
+    *   [`KeyFunction`](#keyfunction)
+    *   [`Test`](#test)
 *   [Types](#types)
 *   [Compatibility](#compatibility)
 *   [Related](#related)
@@ -41,7 +43,7 @@ wrapper makes it all a bit easier.
 ## Install
 
 This package is [ESM only][esm].
-In Node.js (version 12.20+, 14.14+, 16.0+, 18.0+), install with [npm][]:
+In Node.js (version 14.14+ and 16.0+), install with [npm][]:
 
 ```sh
 npm install unist-util-index
@@ -50,14 +52,14 @@ npm install unist-util-index
 In Deno with [`esm.sh`][esmsh]:
 
 ```js
-import {Index} from "https://esm.sh/unist-util-index@3"
+import {Index} from 'https://esm.sh/unist-util-index@3'
 ```
 
 In browsers with [`esm.sh`][esmsh]:
 
 ```html
 <script type="module">
-  import {Index} from "https://esm.sh/unist-util-index@3?bundle"
+  import {Index} from 'https://esm.sh/unist-util-index@3?bundle'
 </script>
 ```
 
@@ -75,12 +77,12 @@ const tree = fromMarkdown(await fs.readFile('readme.md'))
 // Index on heading depth:
 const indexOnDepth = new Index('depth', tree, 'heading')
 
-console.log(indexOnDepth.get(2).map(toString))
+console.log(indexOnDepth.get(2).map((d) => toString(d)))
 
 // Index on definition identifier:
 const indexOnIdentifier = new Index('identifier', tree, 'definition')
 
-console.log(indexOnIdentifier.get('unist').map(node => node.url))
+console.log(indexOnIdentifier.get('unist').map((node) => node.url))
 ```
 
 Yields:
@@ -104,7 +106,7 @@ Yields:
 
 ## API
 
-This package exports the identifier `Index`.
+This package exports the identifier [`Index`][index].
 There is no default export.
 
 ### `Index(prop|keyFunction[, tree[, test]])`
@@ -112,37 +114,33 @@ There is no default export.
 Create a mutable index data structure, that maps property values or computed
 keys, to nodes.
 
-If `tree` is given, the index is initialized with all nodes, optionally filtered
-by `test`.
+If `tree` is given, the index is initialized with all nodes, optionally
+filtered by `test`.
 
 ###### Parameters
 
 *   `prop` (`string`)
     — field to look up in each node to find keys
-*   `keyFunction` ([`KeyFunction`][key-function])
+*   `keyFunction` ([`KeyFunction`][keyfunction])
     — function called with each node to calculate keys
 *   `tree` ([`Node`][node], optional)
     — tree to index
-*   `test` ([`Test`][is], optional)
-    — [`is`][is]-compatible test
+*   `test` ([`Test`][test], optional)
+    — `unist-util-is` compatible test
 
 ###### Returns
 
 Instance (`Index`).
 
-#### `function keyFunction(node)`
-
-Function called with every added node ([`Node`][node]) to calculate the key to
-index on.
-
-###### Returns
-
-Key to index on (`unknown`).
-Can be anything that can be used as a key in a [`Map`][map].
-
 #### `Index#get(key)`
 
-Get nodes by `key` (`unknown`).
+Get nodes by `key`.
+
+###### Parameters
+
+*   `key` (`unknown`)
+    — key to retrieve, can be anything that can be used as a key in a
+    [`Map`][map]
 
 ###### Returns
 
@@ -150,7 +148,12 @@ List of zero or more nodes ([`Array<Node>`][node]).
 
 #### `Index#add(node)`
 
-Add `node` ([`Node`][node]) to the index (if not already present).
+Add `node` to the index (if not already present).
+
+###### Parameters
+
+*   `node` ([`Node`][node])
+    — node to index
 
 ###### Returns
 
@@ -158,16 +161,42 @@ Current instance (`Index`).
 
 #### `Index#remove(node)`
 
-Remove `node` ([`Node`][node]) from the index (if present).
+Remove `node` from the index (if present).
+
+###### Parameters
+
+*   `node` ([`Node`][node])
+    — node to remove
 
 ###### Returns
 
 Current instance (`Index`).
 
+### `KeyFunction`
+
+Function called with every added node to calculate the key to index on
+(TypeScript type).
+
+###### Parameters
+
+*   `node` ([`Node`][node])
+    — node to calculate a key for
+
+###### Returns
+
+Key to index on (`unknown`).
+
+Can be anything that can be used as a key in a [`Map`][map].
+
+### `Test`
+
+[`unist-util-is`][unist-util-is] compatible test (TypeScript type).
+
 ## Types
 
 This package is fully typed with [TypeScript][].
-It exports the additional types `KeyFunction` and `Test`.
+It exports the additional types [`KeyFunction`][keyfunction] and
+[`Test`][test].
 
 ## Compatibility
 
@@ -249,8 +278,12 @@ abide by its terms.
 
 [node]: https://github.com/syntax-tree/unist#node
 
-[is]: https://github.com/syntax-tree/unist-util-is
-
 [map]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map
 
-[key-function]: #function-keyfunctionnode
+[unist-util-is]: https://github.com/syntax-tree/unist-util-is
+
+[index]: #indexpropkeyfunction-tree-test
+
+[keyfunction]: #keyfunction
+
+[test]: #test
