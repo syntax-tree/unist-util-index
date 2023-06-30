@@ -77,12 +77,20 @@ const tree = fromMarkdown(await fs.readFile('readme.md'))
 // Index on heading depth:
 const indexOnDepth = new Index('depth', tree, 'heading')
 
-console.log(indexOnDepth.get(2).map((d) => toString(d)))
+console.log(
+  indexOnDepth.get(2).map(function (d) {
+    return toString(d)
+  })
+)
 
 // Index on definition identifier:
 const indexOnIdentifier = new Index('identifier', tree, 'definition')
 
-console.log(indexOnIdentifier.get('unist').map((node) => node.url))
+console.log(
+  indexOnIdentifier.get('unist').map(function (node) {
+    return node.url
+  })
+)
 ```
 
 Yields:
