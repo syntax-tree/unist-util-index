@@ -9,8 +9,8 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 import {u} from 'unist-builder'
+import {Index} from 'unist-util-index'
 import {select} from 'unist-util-select'
-import {Index} from './index.js'
 
 test('core', async function (t) {
   await t.test('should expose the public api', async function () {
