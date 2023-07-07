@@ -41,8 +41,8 @@
     "index.js"
   ],
   "dependencies": {
-    "@types/unist": "^2.0.0",
-    "unist-util-visit": "^4.0.0"
+    "@types/unist": "^3.0.0",
+    "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
@@ -52,8 +52,8 @@
     "remark-preset-wooorm": "^9.0.0",
     "type-coverage": "^2.0.0",
     "typescript": "^5.0.0",
-    "unist-builder": "^3.0.0",
-    "unist-util-select": "^4.0.0",
+    "unist-builder": "^4.0.0",
+    "unist-util-select": "^5.0.0",
     "xo": "^0.54.0"
   },
   "scripts": {
