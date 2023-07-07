@@ -52,14 +52,14 @@ npm install unist-util-index
 In Deno with [`esm.sh`][esmsh]:
 
 ```js
-import {Index} from 'https://esm.sh/unist-util-index@3'
+import {Index} from 'https://esm.sh/unist-util-index@4'
 ```
 
 In browsers with [`esm.sh`][esmsh]:
 
 ```html
 <script type="module">
-  import {Index} from 'https://esm.sh/unist-util-index@3?bundle'
+  import {Index} from 'https://esm.sh/unist-util-index@4?bundle'
 </script>
 ```
 
